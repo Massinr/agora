@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agora Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 50%, #16213E 100%);
+            color: #E2E8F0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: rgba(26, 26, 46, 0.9);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(107, 70, 193, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #94A3B8;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 15, 35, 0.8);
+            border: 1px solid rgba(107, 70, 193, 0.3);
+            border-radius: 10px;
+            color: #E2E8F0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #6B46C1;
+            box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.4);
+        }
+
+        .error-message {
+            color: #EF4444;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .admin-panel {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .admin-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .admin-subtitle {
+            color: #94A3B8;
+            font-size: 1.1rem;
+        }
+
+        .admin-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .admin-section {
+            background: rgba(26, 26, 46, 0.8);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(107, 70, 193, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #A78BFA;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-upload {
+            margin-bottom: 1.5rem;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 15, 35, 0.8);
+            border: 2px dashed rgba(107, 70, 193, 0.5);
+            border-radius: 10px;
+            color: #E2E8F0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input:hover {
+            border-color: #6B46C1;
+            background: rgba(107, 70, 193, 0.1);
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 70, 193, 0.4);
+        }
+
+        .event-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #A78BFA;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-input {
+            padding: 0.75rem;
+            background: rgba(15, 15, 35, 0.8);
+            border: 1px solid rgba(107, 70, 193, 0.3);
+            border-radius: 8px;
+            color: #E2E8F0;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #6B46C1;
+            box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+            background: rgba(15, 15, 35, 0.9);
+        }
+
+        .form-input::placeholder {
+            color: #64748B;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .char-count {
+            font-size: 0.8rem;
+            color: #64748B;
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .events-list {
+            margin-top: 1.5rem;
+        }
+
+        .event-item {
+            background: rgba(15, 15, 35, 0.6);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(107, 70, 193, 0.2);
+        }
+
+        .event-title {
+            font-weight: 600;
+            color: #A78BFA;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-details {
+            color: #94A3B8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sections {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(107, 70, 193, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <h1 class="login-title">Agora Admin</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+            <div class="error-message" id="errorMessage"></div>
+        </form>
+    </div>
+
+    <div class="admin-panel" id="adminPanel">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        
+        <div class="admin-header">
+            <h1 class="admin-title">Agora Admin Panel</h1>
+            <p class="admin-subtitle">Manage your website content</p>
+        </div>
+
+        <div class="admin-sections">
+            <div class="admin-section">
+                <h2 class="section-title">Gallery Management</h2>
+                <div class="file-upload">
+                    <input type="file" id="galleryUpload" class="file-input" accept="image/*" multiple>
+                    <div class="form-group">
+                        <label for="imageDescription">Image Description</label>
+                        <textarea class="form-input form-textarea" id="imageDescription" placeholder="Enter description for all selected images..." rows="3"></textarea>
+                    </div>
+                    <button class="upload-btn" onclick="uploadGalleryImages()">Upload Images</button>
+                </div>
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Gallery images will be displayed here -->
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2 class="section-title">Event Management</h2>
+                <form class="event-form" id="eventForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTitle">Event Title</label>
+                            <input type="text" class="form-input" id="eventTitle" placeholder="Enter event title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventDate">Date</label>
+                            <input type="text" class="form-input" id="eventDate" placeholder="e.g., Dec 15" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTime">Time</label>
+                            <input type="text" class="form-input" id="eventTime" placeholder="e.g., 2:00 PM" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventLocation">Location</label>
+                            <input type="text" class="form-input" id="eventLocation" placeholder="e.g., Main Hall" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventDescription">Description</label>
+                        <textarea class="form-input form-textarea" id="eventDescription" placeholder="Enter detailed event description..." required></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span> characters
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Add Event</button>
+                        <button type="button" class="btn btn-danger" onclick="clearEventForm()">Clear</button>
+                    </div>
+                </form>
+                <div class="events-list" id="eventsList">
+                    <!-- Events will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CORRECT_USERNAME = 'massine';
+        const CORRECT_PASSWORD = '02sep2007';
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadAdminData();
+            } else {
+                errorMessage.textContent = 'Invalid username or password';
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        function logout() {
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function loadAdminData() {
+            loadGalleryImages();
+            loadEvents();
+        }
+
+        function loadGalleryImages() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const images = JSON.parse(localStorage.getItem('agoraGalleryImages') || '[]');
+            
+            galleryGrid.innerHTML = '';
+            images.forEach((imageData, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.innerHTML = `
+                    <img src="${imageData.url}" alt="Gallery Image">
+                    <div class="image-caption">${imageData.description}</div>
+                    <button class="remove-btn" onclick="removeGalleryImage(${index})">×</button>
+                `;
+                galleryGrid.appendChild(galleryItem);
+            });
+        }
+
+        function uploadGalleryImages() {
+            const fileInput = document.getElementById('galleryUpload');
+            const descriptionInput = document.getElementById('imageDescription');
+            const files = fileInput.files;
+            const description = descriptionInput.value.trim();
+            
+            if (files.length === 0) {
+                alert('Please select images to upload');
+                return;
+            }
+
+            const images = JSON.parse(localStorage.getItem('agoraGalleryImages') || '[]');
+            
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    images.push({
+                        url: e.target.result,
+                        name: file.name,
+                        description: description || `Image uploaded on ${new Date().toLocaleDateString()}`,
+                        timestamp: Date.now()
+                    });
+                    localStorage.setItem('agoraGalleryImages', JSON.stringify(images));
+                    loadGalleryImages();
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            fileInput.value = '';
+            descriptionInput.value = '';
+        }
+
+        function removeGalleryImage(index) {
+            const images = JSON.parse(localStorage.getItem('agoraGalleryImages') || '[]');
+            images.splice(index, 1);
+            localStorage.setItem('agoraGalleryImages', JSON.stringify(images));
+            loadGalleryImages();
+        }
+
+        function loadEvents() {
+            const eventsList = document.getElementById('eventsList');
+            const events = JSON.parse(localStorage.getItem('agoraEvents') || '[]');
+            
+            eventsList.innerHTML = '';
+            events.forEach((event, index) => {
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item';
+                eventItem.innerHTML = `
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-details">${event.date} • ${event.time} • ${event.location}</div>
+                    <div class="event-details">${event.description}</div>
+                    <div class="event-actions">
+                        <button class="btn btn-danger btn-small" onclick="removeEvent(${index})">Remove</button>
+                    </div>
+                `;
+                eventsList.appendChild(eventItem);
+            });
+        }
+
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const event = {
+                title: document.getElementById('eventTitle').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                location: document.getElementById('eventLocation').value,
+                description: document.getElementById('eventDescription').value,
+                timestamp: Date.now()
+            };
+            
+            const events = JSON.parse(localStorage.getItem('agoraEvents') || '[]');
+            events.push(event);
+            localStorage.setItem('agoraEvents', JSON.stringify(events));
+            
+            loadEvents();
+            clearEventForm();
+        });
+
+        function removeEvent(index) {
+            const events = JSON.parse(localStorage.getItem('agoraEvents') || '[]');
+            events.splice(index, 1);
+            localStorage.setItem('agoraEvents', JSON.stringify(events));
+            loadEvents();
+        }
+
+        function clearEventForm() {
+            document.getElementById('eventForm').reset();
+            document.getElementById('charCount').textContent = '0';
+        }
+
+        document.getElementById('eventDescription').addEventListener('input', function() {
+            const charCount = this.value.length;
+            document.getElementById('charCount').textContent = charCount;
+        });
+    </script>
+</body>
+</html>
